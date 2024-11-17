@@ -1,6 +1,7 @@
 package ru.code
 
 import ru.code.State.*
+import java.io.File
 
 const val UPPER_CASE_LENGTH = 1
 val lowercase = 'a'..'z'
@@ -41,4 +42,10 @@ fun MutableMap<String, Int>.parse(str: String) {
         }
     }
     if (state != OFF) put(sb)
+}
+
+fun MutableMap<String, Int>.delete() {
+    File("src/main/resources/delete_words.txt").bufferedReader().forEachLine {
+        this.remove(it)
+    }
 }
