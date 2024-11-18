@@ -9,7 +9,7 @@ val uppercase = 'A'..'Z'
 
 fun MutableMap<String, Int>.parse(str: String) {
     val sb = StringBuilder()
-    var state = OFF
+    var state = BREAK
 
     fun put(sb: StringBuilder) = with(sb) {
         if (this.length != 1)
@@ -34,14 +34,20 @@ fun MutableMap<String, Int>.parse(str: String) {
             }
 
             else -> {
-                if (state != OFF) {
+                if (state == BREAK) {
+                    if (c == '/' || c == '*' || c == '#')
+                        break
+                    if (c != ' ')
+                        state = OFF_CASE
+                } else if (state == LOWER_CASE || state == UPPER_CASE) {
                     put(sb)
-                    state = OFF
+                    state = OFF_CASE
                 }
             }
         }
     }
-    if (state != OFF) put(sb)
+    if (state == LOWER_CASE || state == UPPER_CASE)
+        put(sb)
 }
 
 fun MutableMap<String, Int>.delete() {
