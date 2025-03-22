@@ -11,9 +11,9 @@ fun MutableMap<String, Int>.parse(str: String) {
     val sb = StringBuilder()
     var state = BREAK
 
-    fun put(sb: StringBuilder) = with(sb) {
-        if (this.length != 1)
-            compute(this.toString()) { _, v -> v?.inc() ?: 1 }
+    fun addWord() {
+        if (sb.length != 1)
+            this.compute(sb.toString()) { _, v -> v?.inc() ?: 1 }
         this.clear()
     }
 
@@ -21,14 +21,14 @@ fun MutableMap<String, Int>.parse(str: String) {
         when (c) {
             in lowercase -> {
                 if (state == UPPER_CASE && sb.length != UPPER_CASE_LENGTH)
-                    put(sb)
+                    addWord()
                 sb.append(c)
                 state = LOWER_CASE
             }
 
             in uppercase -> {
                 if (state == LOWER_CASE)
-                    put(sb)
+                    addWord()
                 sb.append(c.lowercaseChar())
                 state = UPPER_CASE
             }
@@ -40,14 +40,14 @@ fun MutableMap<String, Int>.parse(str: String) {
                     if (c != ' ')
                         state = OFF_CASE
                 } else if (state == LOWER_CASE || state == UPPER_CASE) {
-                    put(sb)
+                    addWord()
                     state = OFF_CASE
                 }
             }
         }
     }
     if (state == LOWER_CASE || state == UPPER_CASE)
-        put(sb)
+        addWord()
 }
 
 fun MutableMap<String, Int>.delete() {
