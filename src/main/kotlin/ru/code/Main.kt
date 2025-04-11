@@ -15,6 +15,5 @@ fun main() {
         }
     }
     map.delete()
-    for ((k, v) in map)
-        println("$k - $v")
+    map.forEach { (k, v) -> println("$k - $v") }
 }
